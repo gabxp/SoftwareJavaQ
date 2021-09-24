@@ -5,6 +5,14 @@
  */
 package view;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.DriverManager;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Gabe e Koto
@@ -30,9 +38,9 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         lblFundo1 = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
         lblSenha = new javax.swing.JLabel();
-        lblRA = new javax.swing.JLabel();
+        lblNome = new javax.swing.JLabel();
         txtSenha = new javax.swing.JTextField();
-        txtRA = new javax.swing.JTextField();
+        txtNome = new javax.swing.JTextField();
         txtUsuario = new javax.swing.JTextField();
         btnFechar = new javax.swing.JButton();
         btnCadastrar = new javax.swing.JButton();
@@ -56,14 +64,14 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         getContentPane().add(lblSenha);
         lblSenha.setBounds(120, 100, 90, 22);
 
-        lblRA.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblRA.setText("RA:");
-        getContentPane().add(lblRA);
-        lblRA.setBounds(120, 140, 90, 22);
+        lblNome.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblNome.setText("Nome:");
+        getContentPane().add(lblNome);
+        lblNome.setBounds(120, 140, 90, 22);
         getContentPane().add(txtSenha);
         txtSenha.setBounds(220, 100, 180, 30);
-        getContentPane().add(txtRA);
-        txtRA.setBounds(220, 140, 180, 30);
+        getContentPane().add(txtNome);
+        txtNome.setBounds(220, 140, 180, 30);
         getContentPane().add(txtUsuario);
         txtUsuario.setBounds(220, 60, 180, 30);
 
@@ -74,6 +82,11 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
 
         btnCadastrar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCadastrar.setText("Cadastrar");
+        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCadastrarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnCadastrar);
         btnCadastrar.setBounds(100, 200, 100, 40);
 
@@ -89,6 +102,37 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(531, 339));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
+        try {
+        //Declaração das variáveis
+            Connection con;
+            PreparedStatement st;
+            //Carregamento do Driver da biblioteca
+            Class.forName("com.mysql.jdbc.Driver");
+            //Estabelecimento da conexão com o Banco de dados
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/usuarios","root","nagito");
+            // Criação do comando SQL que vai ser executado nno Banco de dados
+            st = con.prepareStatement("INSERT INTO usuario values (?,?,?)");
+            st.setString(1,txtUsuario.getText());
+            st.setString(2,txtSenha.getText());
+            st.setString(3,txtNome.getText());
+            //Execução do comando SQL
+            st.executeUpdate();
+            //Mensagens para o usuário do software 
+            JOptionPane.showMessageDialog(null,"Usuário cadastrado com sucesso");
+            txtUsuario.setText("");
+            txtSenha.setText("");
+            txtNome.setText("");
+            txtUsuario.requestFocus();
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null,"Você não tem o driver de conexão na biblioteca");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,ex.getMessage());
+            JOptionPane.showMessageDialog(null,"Erro ao tentar inserir os dados");
+        }
+
+    }//GEN-LAST:event_btnCadastrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -131,10 +175,10 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
     private javax.swing.JButton btnFechar;
     private javax.swing.JLabel lblFundo;
     private javax.swing.JLabel lblFundo1;
-    private javax.swing.JLabel lblRA;
+    private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblSenha;
     private javax.swing.JLabel lblUsuario;
-    private javax.swing.JTextField txtRA;
+    private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtSenha;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
