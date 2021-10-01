@@ -113,25 +113,33 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
             //Estabelecimento da conexão com o Banco de dados
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/usuarios","root","nagito");
             // Criação do comando SQL que vai ser executado nno Banco de dados
-            st = con.prepareStatement("INSERT INTO usuario values (?,?,?)");
-            st.setString(1,txtUsuario.getText());
-            st.setString(2,txtSenha.getText());
-            st.setString(3,txtNome.getText());
-            //Execução do comando SQL
-            st.executeUpdate();
-            //Mensagens para o usuário do software 
-            JOptionPane.showMessageDialog(null,"Usuário cadastrado com sucesso");
-            txtUsuario.setText("");
-            txtSenha.setText("");
-            txtNome.setText("");
-            txtUsuario.requestFocus();
+           
+             if(!txtUsuario.getText().equals("") &&  !txtSenha.getText().equals("")){
+               st = con.prepareStatement("INSERT INTO usuario values (?,?,?)");
+               st.setString(1,txtUsuario.getText());
+               st.setString(2,txtSenha.getText());
+               st.setString(3,txtNome.getText());
+               //Execução do comando SQL
+               st.executeUpdate();
+               //Mensagens para o usuário do software 
+                JOptionPane.showMessageDialog(null,"Usuário cadastrado com sucesso");
+                txtUsuario.setText("");
+                txtSenha.setText("");
+                txtNome.setText("");
+                txtUsuario.requestFocus();
+            } else {
+                JOptionPane.showMessageDialog(null,"Digite o nome do usuário e a senha");
+                txtUsuario.requestFocus();
+             }
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null,"Você não tem o driver de conexão na biblioteca");
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null,ex.getMessage());
-            JOptionPane.showMessageDialog(null,"Erro ao tentar inserir os dados");
-        }
-
+        }  catch (SQLException ex) {
+            if(ex.getErrorCode()==1062){
+               JOptionPane.showMessageDialog(null,"Este nome de usuário e senha já constam em nosso cadastro");
+            } else {
+               JOptionPane.showMessageDialog(null,"Erro ao tentar salvar os dados\nEntre em contato  com o administrador do sistema");
+            }
+        } 
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     /**

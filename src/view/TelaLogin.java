@@ -5,6 +5,15 @@
  */
 package view;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.DriverManager;
+import javax.swing.JOptionPane;
+import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Gabe e Koto
@@ -31,9 +40,9 @@ public class TelaLogin extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtUsuario = new javax.swing.JTextPane();
         lblUsuario = new javax.swing.JLabel();
-        pswSenha = new javax.swing.JPasswordField();
         btnEntrar = new javax.swing.JButton();
         btnCadastro = new javax.swing.JButton();
+        pswSenha = new javax.swing.JPasswordField();
         lblFundo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -49,16 +58,19 @@ public class TelaLogin extends javax.swing.JFrame {
         jScrollPane1.setViewportView(txtUsuario);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(240, 140, 190, 30);
+        jScrollPane1.setBounds(230, 80, 190, 30);
 
         lblUsuario.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lblUsuario.setText("Usuário:");
         getContentPane().add(lblUsuario);
         lblUsuario.setBounds(100, 80, 120, 30);
-        getContentPane().add(pswSenha);
-        pswSenha.setBounds(240, 80, 190, 30);
 
         btnEntrar.setText("Entrar");
+        btnEntrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEntrarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnEntrar);
         btnEntrar.setBounds(140, 210, 100, 30);
 
@@ -70,6 +82,8 @@ public class TelaLogin extends javax.swing.JFrame {
         });
         getContentPane().add(btnCadastro);
         btnCadastro.setBounds(280, 210, 100, 30);
+        getContentPane().add(pswSenha);
+        pswSenha.setBounds(230, 140, 190, 30);
 
         lblFundo.setBackground(new java.awt.Color(255, 204, 255));
         lblFundo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/fundo.jpg"))); // NOI18N
@@ -86,7 +100,33 @@ public class TelaLogin extends javax.swing.JFrame {
         tela.setVisible(true);
     }//GEN-LAST:event_btnCadastroActionPerformed
 
-    /**
+    private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
+        try {
+            Connection con;
+            PreparedStatement st;
+            ResultSet rs;
+            //Carregamento do Driver da biblioteca
+            Class.forName("com.mysql.jdbc.Driver");
+            //Estabelecimento da conexão com o Banco de dados
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/usuarios","root","nagito");          
+            // Criação do comando SQL que vai ser executado nno Banco de dados
+            st = con.prepareStatement("SELECT * FROM USUARIO WHERE USUARIO = ? AND SENHA = ?");
+            st.setString(1, txtUsuario.getText());
+            st.setString(2, pswSenha.getText());
+            rs = st.executeQuery();
+            if(rs.next()){ //se encontrou o usuário
+                JOptionPane.showMessageDialog(null, "Usuario encontrado");
+            } else {
+                JOptionPane.showMessageDialog(null, "Usuario não encontrado");
+            }
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null,"Driver de conexão não encontrado" + ex.getMessage());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"Erro na consulta ao Banco de dados" + ex.getMessage());  
+        }
+    }//GEN-LAST:event_btnEntrarActionPerformed
+
+/**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
