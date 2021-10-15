@@ -88,9 +88,9 @@ public class TelaLogin extends javax.swing.JFrame {
         lblFundo.setBackground(new java.awt.Color(255, 204, 255));
         lblFundo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/fundo.jpg"))); // NOI18N
         getContentPane().add(lblFundo);
-        lblFundo.setBounds(0, 0, 510, 310);
+        lblFundo.setBounds(0, 0, 510, 300);
 
-        setSize(new java.awt.Dimension(525, 345));
+        setSize(new java.awt.Dimension(525, 348));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -115,7 +115,10 @@ public class TelaLogin extends javax.swing.JFrame {
             st.setString(2, pswSenha.getText());
             rs = st.executeQuery();
             if(rs.next()){ //se encontrou o usuário
-                JOptionPane.showMessageDialog(null, "Usuario encontrado");
+                TelaMenu t;
+                t = new TelaMenu(rs.getString("nome"), rs.getString("cargo"));
+                t.setVisible(true);
+                this.setVisible(false);
             } else {
                 JOptionPane.showMessageDialog(null, "Usuario não encontrado");
             }

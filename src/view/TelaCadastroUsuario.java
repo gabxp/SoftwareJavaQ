@@ -36,18 +36,22 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
     private void initComponents() {
 
         lblFundo1 = new javax.swing.JLabel();
+        lblFundo = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
         lblSenha = new javax.swing.JLabel();
-        lblNome = new javax.swing.JLabel();
+        lblCargo = new javax.swing.JLabel();
         txtSenha = new javax.swing.JTextField();
         txtNome = new javax.swing.JTextField();
         txtUsuario = new javax.swing.JTextField();
         btnFechar = new javax.swing.JButton();
         btnCadastrar = new javax.swing.JButton();
         btnApagar = new javax.swing.JButton();
-        lblFundo = new javax.swing.JLabel();
+        lblNome1 = new javax.swing.JLabel();
+        cmbCargo = new javax.swing.JComboBox<>();
 
         lblFundo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/fundo.jpg"))); // NOI18N
+
+        lblFundo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/fundo.jpg"))); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cadastra-se");
@@ -57,26 +61,31 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         lblUsuario.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblUsuario.setText("Usuário");
         getContentPane().add(lblUsuario);
-        lblUsuario.setBounds(120, 60, 90, 22);
+        lblUsuario.setBounds(90, 40, 90, 22);
 
         lblSenha.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblSenha.setText("Senha:");
         getContentPane().add(lblSenha);
-        lblSenha.setBounds(120, 100, 90, 22);
+        lblSenha.setBounds(90, 80, 90, 22);
 
-        lblNome.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblNome.setText("Nome:");
-        getContentPane().add(lblNome);
-        lblNome.setBounds(120, 140, 90, 22);
+        lblCargo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblCargo.setText("Cargo:");
+        getContentPane().add(lblCargo);
+        lblCargo.setBounds(90, 160, 90, 22);
         getContentPane().add(txtSenha);
-        txtSenha.setBounds(220, 100, 180, 30);
+        txtSenha.setBounds(190, 70, 180, 30);
         getContentPane().add(txtNome);
-        txtNome.setBounds(220, 140, 180, 30);
+        txtNome.setBounds(190, 110, 180, 30);
         getContentPane().add(txtUsuario);
-        txtUsuario.setBounds(220, 60, 180, 30);
+        txtUsuario.setBounds(190, 30, 180, 30);
 
         btnFechar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnFechar.setText("Fechar");
+        btnFechar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFecharActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnFechar);
         btnFechar.setBounds(340, 200, 100, 40);
 
@@ -95,9 +104,15 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         getContentPane().add(btnApagar);
         btnApagar.setBounds(220, 200, 100, 40);
 
-        lblFundo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/fundo.jpg"))); // NOI18N
-        getContentPane().add(lblFundo);
-        lblFundo.setBounds(0, 0, 530, 300);
+        lblNome1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblNome1.setText("Nome:");
+        getContentPane().add(lblNome1);
+        lblNome1.setBounds(90, 120, 90, 22);
+
+        cmbCargo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        cmbCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gerente", "Estagiário", "Analista", "Programador" }));
+        getContentPane().add(cmbCargo);
+        cmbCargo.setBounds(190, 160, 110, 30);
 
         setSize(new java.awt.Dimension(531, 339));
         setLocationRelativeTo(null);
@@ -115,10 +130,11 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
             // Criação do comando SQL que vai ser executado nno Banco de dados
            
              if(!txtUsuario.getText().equals("") &&  !txtSenha.getText().equals("")){
-               st = con.prepareStatement("INSERT INTO usuario values (?,?,?)");
+               st = con.prepareStatement("INSERT INTO usuario values (?,?,?,?)");
                st.setString(1,txtUsuario.getText());
                st.setString(2,txtSenha.getText());
                st.setString(3,txtNome.getText());
+               st.setString(4,cmbCargo.getSelectedItem().toString());
                //Execução do comando SQL
                st.executeUpdate();
                //Mensagens para o usuário do software 
@@ -141,6 +157,12 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
             }
         } 
     }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
+                TelaCadastroUsuario u;
+                u = new TelaCadastroUsuario();
+                this.dispose();
+    }//GEN-LAST:event_btnFecharActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,9 +203,11 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
     private javax.swing.JButton btnApagar;
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnFechar;
+    private javax.swing.JComboBox<String> cmbCargo;
+    private javax.swing.JLabel lblCargo;
     private javax.swing.JLabel lblFundo;
     private javax.swing.JLabel lblFundo1;
-    private javax.swing.JLabel lblNome;
+    private javax.swing.JLabel lblNome1;
     private javax.swing.JLabel lblSenha;
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JTextField txtNome;
