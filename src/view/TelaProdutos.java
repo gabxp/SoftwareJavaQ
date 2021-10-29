@@ -5,6 +5,15 @@
  */
 package view;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Gabe e Koto
@@ -27,13 +36,231 @@ public class TelaProdutos extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblNome = new javax.swing.JLabel();
+        lblCodigo = new javax.swing.JLabel();
+        lblPreco = new javax.swing.JLabel();
+        txtNome = new javax.swing.JTextField();
+        txtCodigo = new javax.swing.JTextField();
+        btnConsultar = new javax.swing.JButton();
+        btnCadastrar = new javax.swing.JButton();
+        btnAlterar = new javax.swing.JButton();
+        lblMarca = new javax.swing.JLabel();
+        txtMarca = new javax.swing.JTextField();
+        btnExcluir1 = new javax.swing.JButton();
+        btnLimpo = new javax.swing.JButton();
+        txtPreco = new javax.swing.JTextField();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tela de Produtos");
         getContentPane().setLayout(null);
 
-        setSize(new java.awt.Dimension(416, 339));
+        lblNome.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblNome.setText("Nome:");
+        getContentPane().add(lblNome);
+        lblNome.setBounds(20, 100, 120, 20);
+
+        lblCodigo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblCodigo.setText("Código:");
+        getContentPane().add(lblCodigo);
+        lblCodigo.setBounds(20, 60, 120, 20);
+
+        lblPreco.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblPreco.setText("Preço:");
+        getContentPane().add(lblPreco);
+        lblPreco.setBounds(20, 140, 120, 20);
+        getContentPane().add(txtNome);
+        txtNome.setBounds(110, 90, 280, 30);
+        getContentPane().add(txtCodigo);
+        txtCodigo.setBounds(110, 50, 120, 30);
+
+        btnConsultar.setText("Consultar");
+        btnConsultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnConsultar);
+        btnConsultar.setBounds(120, 240, 90, 30);
+
+        btnCadastrar.setText("Cadastrar");
+        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCadastrarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCadastrar);
+        btnCadastrar.setBounds(10, 240, 90, 30);
+
+        btnAlterar.setText("Alterar");
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAlterar);
+        btnAlterar.setBounds(230, 240, 90, 30);
+
+        lblMarca.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblMarca.setText("Marca:");
+        getContentPane().add(lblMarca);
+        lblMarca.setBounds(20, 180, 120, 20);
+        getContentPane().add(txtMarca);
+        txtMarca.setBounds(110, 170, 280, 30);
+
+        btnExcluir1.setText("Excluir");
+        btnExcluir1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluir1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExcluir1);
+        btnExcluir1.setBounds(340, 240, 90, 30);
+
+        btnLimpo.setText("Limpar");
+        btnLimpo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLimpo);
+        btnLimpo.setBounds(450, 240, 90, 30);
+        getContentPane().add(txtPreco);
+        txtPreco.setBounds(110, 130, 100, 30);
+
+        setSize(new java.awt.Dimension(593, 339));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+private void Limpar(){
+    txtCodigo.setText("");
+    txtNome.setText("");
+    txtPreco2.setText("");
+    txtMarca.setText("");
+    txtNome.setText(""); 
+    txtCodigo.requestFocus();    
+}
+
+private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {                                          
+                Limpar();
+    }  
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
+        try {
+            //Declaração das variáveis
+            Connection con;
+            PreparedStatement st;
+            //Carregamento do Driver da biblioteca
+            Class.forName("com.mysql.jdbc.Driver");
+            //Estabelecimento da conexão com o Banco de dados
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/usuarios","root","nagito");
+            // Criação do comando SQL que vai ser executado nno Banco de dados
+            st = con.prepareStatement("INSERT INTO produto values (?,?,?,?)");
+            st.setString(1,txtCodigo.getText());
+            st.setString(2,txtNome.getText());
+            st.setString(3,txtPreco.getText());
+            st.setString(4,txtMarca.getText());
+            //Execução do comando SQL
+            st.executeUpdate();
+            JOptionPane.showMessageDialog(null,"Produto cadastrado com sucesso");
+            Limpar();
+            
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null,"Você não tem o driver de conexão na biblioteca");
+        } catch (SQLException ex) {
+            if(ex.getErrorCode()==1062){
+               JOptionPane.showMessageDialog(null,"Este Codigo já está cadastrado em nosso sistema");
+               Limpar();
+            } else {
+               JOptionPane.showMessageDialog(null,"Erro ao tentar salvar os dados\nEntre em contato  com o administrador do sistema");
+               Limpar();
+            }
+        }
+    }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
+        try {
+            Connection con;
+            PreparedStatement st;
+            ResultSet rs;
+            //Carregamento do Driver da biblioteca
+            Class.forName("com.mysql.jdbc.Driver");
+            //Estabelecimento da conexão com o Banco de dados
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/usuarios","root","nagito"); 
+             // Criação do comando SQL que vai ser executado no Banco de dados
+            st = con.prepareStatement("SELECT * FROM PRODUTO WHERE CODIGO = ?");
+            st.setString(1, txtCodigo.getText());
+            rs = st.executeQuery();
+            if(rs.next()){ //se encontrou o usuário
+                txtNome.setText(rs.getNString("nome"));
+                txtPreco.setText(rs.getNString("preco"));
+                txtMarca.setText(rs.getNString("marca"));
+                
+            } else {
+                JOptionPane.showMessageDialog(null, "Código do produto não encontrado");
+                Limpar();
+            }
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null,"Driver de conexão não encontrado" + ex.getMessage());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"Erro na consulta ao Banco de dados" + ex.getMessage());  
+        }
+    }//GEN-LAST:event_btnConsultarActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        try {
+            //Declaração das variáveis
+            Connection con;
+            PreparedStatement st;
+            //Carregamento do Driver da biblioteca
+            Class.forName("com.mysql.jdbc.Driver");
+            //Estabelecimento da conexão com o Banco de dados
+            
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/usuarios","root","nagito");   
+            // Criação do comando SQL que vai ser executado nno Banco de dados
+            st = con.prepareStatement("UPDATE produto SET nome = ?, preco = ?, marca = ? WHERE codigo = ?");
+            st.setString(1, txtNome.getText());
+            st.setString(2, txtPreco.getText());
+            st.setString(3, txtMarca.getText());
+            st.setString(4, txtCodigo.getText());
+             //Execução do comando SQL
+            st.executeUpdate();
+            //Mensagens para o usuário do software 
+            JOptionPane.showMessageDialog(null, "Produto alterado com sucesso");
+            Limpar();
+         } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Você não tem o driver de conexão na biblioteca " + ex.getMessage());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o cliente. Entre em contato com o administrador do sistema e informe o erro " + ex.getMessage());
+            Limpar();
+        } 
+    }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnExcluir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluir1ActionPerformed
+        try {
+            //Declaração das variáveis
+                    Connection con;
+                    PreparedStatement st;
+                    //Carregamento do Driver da biblioteca
+                    Class.forName("com.mysql.jdbc.Driver");
+                    //Estabelecimento da conexão com o Banco de dados
+                    con = DriverManager.getConnection("jdbc:mysql://localhost:3306/usuarios","root","nagito");
+                    // Criação do comando SQL que vai ser executado nno Banco de dados
+                    st = con.prepareStatement("DELETE FROM produto WHERE CODIGO = ?");
+                    st.setString(1,txtCodigo.getText());
+                    //Execução do comando SQL
+                    st.executeUpdate();
+                    //Mensagens para o usuário do software 
+                     JOptionPane.showMessageDialog(null,"Produto excluido com sucesso");
+                    Limpar();
+            
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null,"Você não tem o driver de conexão na biblioteca");
+        }  catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o cliente.Entre em contato com o administrador do sistema e innforme o erro " + ex.getMessage());
+         }    
+    }//GEN-LAST:event_btnExcluir1ActionPerformed
+
+    private void btnLimpoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpoActionPerformed
+        Limpar();
+    }//GEN-LAST:event_btnLimpoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -71,5 +298,18 @@ public class TelaProdutos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAlterar;
+    private javax.swing.JButton btnCadastrar;
+    private javax.swing.JButton btnConsultar;
+    private javax.swing.JButton btnExcluir1;
+    private javax.swing.JButton btnLimpo;
+    private javax.swing.JLabel lblCodigo;
+    private javax.swing.JLabel lblMarca;
+    private javax.swing.JLabel lblNome;
+    private javax.swing.JLabel lblPreco;
+    private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtMarca;
+    private javax.swing.JTextField txtNome;
+    private javax.swing.JTextField txtPreco;
     // End of variables declaration//GEN-END:variables
 }

@@ -132,6 +132,12 @@ public class TelaClientes extends javax.swing.JFrame {
         btnConsultar.setBounds(170, 330, 90, 40);
 
         btnExcluir.setText("Excluir");
+        btnExcluir.setEnabled(false);
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnExcluir);
         btnExcluir.setBounds(290, 330, 90, 40);
 
@@ -140,6 +146,12 @@ public class TelaClientes extends javax.swing.JFrame {
         jButton5.setBounds(290, 330, 90, 40);
 
         btnAlterar.setText("Alterar");
+        btnAlterar.setEnabled(false);
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnAlterar);
         btnAlterar.setBounds(410, 330, 90, 40);
 
@@ -195,6 +207,7 @@ public class TelaClientes extends javax.swing.JFrame {
     txtNome.setText("");
     txtTelefone.setText("");    
     txtCpf.requestFocus();
+    btnExcluir.setEnabled(false);
     
 }
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
@@ -216,6 +229,9 @@ public class TelaClientes extends javax.swing.JFrame {
                 txtBairro.setText(rs.getNString("bairro"));
                 txtCidade.setText(rs.getNString("cidade"));
                 txtTelefone.setText(rs.getNString("telefone"));
+                btnExcluir.setEnabled(true);
+                btnAlterar.setEnabled(true);
+                txtCpf.setEditable(false);
             } else {
                 JOptionPane.showMessageDialog(null, "CPF do cliente não encontrado");
                 Limpar();
@@ -226,6 +242,69 @@ public class TelaClientes extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"Erro na consulta ao Banco de dados" + ex.getMessage());  
         }
     }//GEN-LAST:event_btnConsultarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        try {
+        //Declaração das variáveis
+            Connection con;
+            PreparedStatement st;
+            //Carregamento do Driver da biblioteca
+            Class.forName("com.mysql.jdbc.Driver");
+            //Estabelecimento da conexão com o Banco de dados
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/usuarios","root","nagito");
+            // Criação do comando SQL que vai ser executado nno Banco de dados
+           
+             st = con.prepareStatement("DELETE FROM cliente WHERE CPF = ?");
+               st.setString(1,txtCpf.getText());
+               txtCpf.setEditable(true);
+               //Execução do comando SQL
+               st.executeUpdate();
+               //Mensagens para o usuário do software 
+                JOptionPane.showMessageDialog(null,"Cliente excluido com sucesso");
+                Limpar();
+            
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null,"Você não tem o driver de conexão na biblioteca");
+        }  catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o cliente.Entre em contato com o administrador do sistema e innforme o erro " + ex.getMessage());
+         }    
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+          try {
+            //Declaração das variáveis
+            Connection con;
+            PreparedStatement st;
+            //Carregamento do Driver da biblioteca
+            Class.forName("com.mysql.jdbc.Driver");
+            //Estabelecimento da conexão com o Banco de dados
+
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/usuarios","root","nagito");          
+            // Criação do comando SQL que vai ser executado nno Banco de dados
+              st = con.prepareStatement("UPDATE cliente SET nome = ?, endereco = ?, bairro = ?, cidade = ?, telefone = ? WHERE cpf = ?");
+            st.setString(1, txtNome.getText());
+            st.setString(2, txtEndereco.getText());
+            st.setString(3, txtBairro.getText());
+            st.setString(4, txtCidade.getText());
+            st.setString(5, txtTelefone.getText());            
+            st.setString(6, txtCpf.getText());
+            
+            //Execução do comando SQL
+            st.executeUpdate();
+            //Mensagens para o usuário do software 
+            JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
+            Limpar();
+            btnExcluir.setEnabled(false);
+            btnAlterar.setEnabled(false);
+            txtCpf.setEditable(true);
+            
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Você não tem o driver de conexão na biblioteca " + ex.getMessage());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o cliente. Entre em contato com o administrador do sistema e informe o erro " + ex.getMessage());
+        }       
+
+    }//GEN-LAST:event_btnAlterarActionPerformed
   
     /**
      * @param args the command line arguments
