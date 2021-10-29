@@ -133,9 +133,8 @@ public class TelaProdutos extends javax.swing.JFrame {
 private void Limpar(){
     txtCodigo.setText("");
     txtNome.setText("");
-    txtPreco2.setText("");
     txtMarca.setText("");
-    txtNome.setText(""); 
+    txtPreco.setText(""); 
     txtCodigo.requestFocus();    
 }
 
